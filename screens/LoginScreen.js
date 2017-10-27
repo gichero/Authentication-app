@@ -10,6 +10,24 @@ export default class Login extends React.Component{
         super(props);
         this.state = { email: '', password: '', error: '', loading: false };
     }
+
+
+    async logInFB() {
+        const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('1377235485722626', {
+            permissions: ['public_profile'],
+        });
+        if (type === 'success') {
+            // Get the user's name using Facebook's Graph API
+            const response = await fetch(
+
+                `https://graph.facebook.com/me?access_token=${token}`);
+                Alert.alert(
+                    'Logged in!',
+                    `Hi ${(await response.json()).name}!`,
+                );
+            }
+    }
+
     componentWillMount(){
         firebase.initializeApp({
             apiKey: "AIzaSyAdCs_08SFguGovxXkUNy9babvKMVZSF2c",
@@ -36,16 +54,16 @@ export default class Login extends React.Component{
     }
 
     onSignUpPress(){
-        this.setState({error: '', loading: true});
+        this.setState({error: '', loading: false});
 
         const{email, password} = this.state;
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(()=>{
             this.state({ error: '', loading: false });
-            this.props.navigation.navigate('Login');
+            this.props.navigation.navigate('Main');
         })
         .catch(()=>{
-            this.state({error: 'Email already in use', loading: false});
+            this.setState({error: 'Email already in use', loading: false});
         })
     }
 
@@ -61,6 +79,9 @@ export default class Login extends React.Component{
 
                 <Button onPress={this.onSignUpPress.bind(this)}
                 title = 'Sign Up' />
+
+                <Button onPress={this.logInFB.bind(this)}
+                title = 'Connect With Facebook' />
 
             </View>
         )

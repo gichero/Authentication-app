@@ -25,7 +25,7 @@ export default class Login extends React.Component{
                     'Logged in!',
                     `Hi ${(await response.json()).name}!`,
                 );
-            }
+        }
     }
 
     componentWillMount(){
@@ -82,7 +82,6 @@ export default class Login extends React.Component{
 
                 <Button onPress={this.logInFB.bind(this)}
                 title = 'Connect With Facebook' />
-
             </View>
         )
     }
@@ -99,6 +98,7 @@ export default class Login extends React.Component{
                 <FormLabel>Password</FormLabel>
                 <FormInput
                 value = {this.state.password}
+                autoCapitalize = 'none'
                 secureTextEntry
                 placeholder = 'password'
                 onChangeText={password => this.setState({password})}/>
